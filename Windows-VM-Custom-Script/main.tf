@@ -130,25 +130,6 @@ resource "azurerm_virtual_machine" "test" {
   tags = {
     environment = "${var.environment}"
   }
-  #provisioner "remote-exec" {
-  #  connection {
-  #    user     = "${var.admin_username}"
-  #    password = "${var.admin_password}"
-  #    port     = 5985
-  #    https    = false
-  #    timeout  = "10m"
-  #    host     = "${azurerm_public_ip.test.fqdn}"
-  #    type     = "winrm"
-
-      # NOTE: if you're using a real certificate, rather than a self-signed one, you'll want this set to `false`/to remove this.
-  #    insecure = true
-  #  }
-
-  #  inline = [
-  #    "cd C:\\Windows",
-  #    "dir",
-  #  ]
-  #}
 }
 resource "azurerm_virtual_machine_extension" "test" {
   name                 = "${var.computer_name}"
