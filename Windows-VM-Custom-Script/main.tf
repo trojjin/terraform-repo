@@ -59,13 +59,13 @@ resource "azurerm_network_security_group" "test" {
     destination_address_prefix = "${azurerm_subnet.test.address_prefix}"
   }
   security_rule {
-    name                       = "WIN-RM-IN"
+    name                       = "HTTP-IN"
     priority                   = 200
     direction                  = "Inbound"
     access                     = "Allow"
     protocol                   = "Tcp"
     source_port_range          = "*"
-    destination_port_range     = "5985"
+    destination_port_range     = "80"
     source_address_prefix      = "*"
     destination_address_prefix = "${azurerm_subnet.test.address_prefix}"
   }
@@ -109,7 +109,6 @@ resource "azurerm_virtual_machine" "test" {
   storage_os_disk {
     name          = "myosdisk1"
     vhd_uri       = "${azurerm_storage_account.test.primary_blob_endpoint}${azurerm_storage_container.test.name}/myosdisk1.vhd"
-    #vhd_uri       = "Standard LRS"
     caching       = "ReadWrite"
     create_option = "FromImage"
   }
@@ -142,7 +141,7 @@ resource "azurerm_virtual_machine_extension" "test" {
 
   settings = <<SETTINGS
     {
-        "commandToExecute" : "mkdir c:\\test"
+        "commandToExecute" : "powershell.exe Install-WindowsFeature Web-Server"
     }
 SETTINGS
 
