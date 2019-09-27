@@ -2,7 +2,11 @@
     "builders": [{
       "type": "azure-arm",
 
-      "managed_image_resource_group_name": "myResourceGroup",
+      "client_id": "XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX",
+      "client_secret": "XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX",
+      "tenant_id": "XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX",
+      "subscription_id": "XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX",
+      "managed_image_resource_group_name": "myPackerResourceGroup",
       "managed_image_name": "myPackerImage",
   
       "os_type": "Windows",
@@ -21,7 +25,7 @@
           "task": "Image deployment"
       },
   
-      "location": "East US",
+      "location": "Uk South",
       "vm_size": "Standard_DS2_v2"
     }],
     "provisioners": [{
