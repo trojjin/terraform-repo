@@ -155,3 +155,63 @@ resource "azurerm_virtual_machine_scale_set" "vmss" {
   }
   tags = "${var.tags}"
 }
+
+locals {
+  instance_count = 2
+}
+resource "azurerm_autoscale_setting" "vmss" {
+  name                = "autoscale-cpu"
+  target_resource_id  = "${azurerm_virtual_machine_scale_set.vmss.id}"
+  location            = "${azurerm_resource_group.vmss.location}"
+  resource_group_name = "${azurerm_resource_group.vmss.name}"
+
+  profile {
+    name = "autoscale-cpu"
+
+    capacity {
+      default = "${local.instance_count}"
+      minimum = 0
+      maximum = 100
+    }
+
+    rule {
+      metric_trigger {
+        metric_name        = "Percentage CPU"
+        metric_resource_id = "${azurerm_virtual_machine_scale_set.vmss.id}"
+        time_grain         = "PT1M"   # Set to 1min interval for demo purposes.
+        statistic          = "Average"
+        time_window        = "PT5M"
+        time_aggregation   = "Average"
+        operator           = "GreaterThan"
+        threshold          = 60       # Add node if CPU above 60%
+      }
+
+      scale_action {
+        direction = "Increase"
+        type      = "ChangeCount"
+        value     = "1"
+        cooldown  = "PT1M"
+      }
+    }
+
+    rule {
+      metric_trigger {
+        metric_name        = "Percentage CPU"
+        metric_resource_id = "${azurerm_virtual_machine_scale_set.vmss.id}"
+        time_grain         = "PT1M"
+        statistic          = "Average"
+        time_window        = "PT1M"   # Set to 1min interval for demo purposes.
+        time_aggregation   = "Average"
+        operator           = "LessThan"
+        threshold          = 15       # Decrease when CPU less than 15%
+      }
+
+      scale_action {
+        direction = "Decrease"
+        type      = "ChangeCount"
+        value     = "1"
+        cooldown  = "PT1M"
+      }
+    }
+  }
+}
