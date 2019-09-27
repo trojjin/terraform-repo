@@ -31,3 +31,8 @@ override.tf.json
 Dependencies/variables.tf
 Dependencies/main.tf
 Dependencies/README.md
+
+# .secret files
+*.secret
+Windows-VM-Packer/ExecuteBuild.ps1
+.gitignore
